@@ -15,6 +15,10 @@ var camera
 var rotation_helper
 
 var MOUSE_SENSITIVITY = 0.05
+onready var collider = $Area
+onready var footsteps = $FootStep
+var isWalking = false
+signal orb_collected
 
 func _ready():
 	camera = $CameraPivot/Camera
@@ -43,8 +47,20 @@ func process_input(delta):
 		input_movement_vector.x -= 1
 	if Input.is_action_pressed("movement_right"):
 		input_movement_vector.x += 1
+	if Input.is_action_just_pressed("toggle_flashlight"):
+		$CameraPivot/SpotLight.visible = !$CameraPivot/SpotLight.visible
 
 	input_movement_vector = input_movement_vector.normalized()
+	
+	if input_movement_vector.x != 0 || input_movement_vector.y:
+		isWalking = true
+	else:
+		isWalking = false
+	
+	if isWalking && !footsteps.playing:
+		footsteps.play()
+	if !isWalking && footsteps.playing:
+		footsteps.stop()
 
 	# Basis vectors are already normalized.
 	dir += -cam_xform.basis.z * input_movement_vector.y
@@ -98,3 +114,9 @@ func _input(event):
 		var camera_rot = rotation_helper.rotation_degrees
 		camera_rot.x = clamp(camera_rot.x, -70, 70)
 		rotation_helper.rotation_degrees = camera_rot
+
+
+func _on_Area_area_entered(area):
+	if area.is_in_group("Orbs"):
+		area.queue_free()
+		emit_signal("orb_collected")
