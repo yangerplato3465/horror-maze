@@ -2,7 +2,8 @@ extends KinematicBody
 
 const GRAVITY = -24.8
 var vel = Vector3()
-const MAX_SPEED = 7
+const MAX_SPEED = 3
+const RUN_SPEED = 7
 const JUMP_SPEED = 18
 const ACCEL = 4.5
 
@@ -19,7 +20,10 @@ onready var collider = $Area
 onready var footsteps = $FootStep
 onready var growl = $Growl
 onready var fader = $Fader
+onready var runMeter = $UI/ProgressBar
 var isWalking = false
+var isRunning = false
+var canRun = true
 var shake_amount = 0;
 var isDying = false
 var monster = null
@@ -45,6 +49,7 @@ func _physics_process(delta):
 
 	process_input(delta)
 	process_movement(delta)
+	process_run_meter(delta)
 
 func process_input(delta):
 
@@ -65,10 +70,14 @@ func process_input(delta):
 		input_movement_vector.x += 1
 	if Input.is_action_just_pressed("toggle_flashlight"):
 		$CameraPivot/SpotLight.visible = !$CameraPivot/SpotLight.visible
+	if Input.is_action_pressed("run") && input_movement_vector.y != 0:
+		isRunning = true
+	else:
+		isRunning = false
 
 	input_movement_vector = input_movement_vector.normalized()
 	
-	if input_movement_vector.x != 0 || input_movement_vector.y:
+	if input_movement_vector.x != 0 || input_movement_vector.y != 0:
 		isWalking = true
 	else:
 		isWalking = false
@@ -107,9 +116,12 @@ func process_movement(delta):
 
 	var hvel = vel
 	hvel.y = 0
-
+	print("canrun" + String(canRun))
 	var target = dir
-	target *= MAX_SPEED
+	if isRunning && canRun:
+		target *= RUN_SPEED
+	else:
+		target *= MAX_SPEED
 
 	var accel
 	if dir.dot(hvel) > 0:
@@ -135,6 +147,8 @@ func die():
 	isDying = true
 	fader.set_playback_speed(0.15)
 	growl.play()
+	$Breathing.stop()
+	fader.word_fade()
 	fader.fade_in()
 
 func _on_Area_area_entered(area):
@@ -145,3 +159,19 @@ func _on_Area_area_entered(area):
 
 func _on_Growl_finished():
 	get_tree().change_scene("res://Scenes/MainMenu.tscn")
+
+func process_run_meter(delta):
+	
+	if isRunning:
+		runMeter.value -= 30 * delta
+	elif !isRunning && canRun:
+		runMeter.value += 30 * delta
+	
+	if runMeter.value <= 0:
+		canRun = false
+		$RefillTimer.start()
+		runMeter.value += 1
+
+
+func _on_RefillTimer_timeout():
+	canRun = true

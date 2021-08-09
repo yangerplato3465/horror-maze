@@ -5,6 +5,7 @@ const SPEED = 2.0
 var target = null
 var vel = Vector3()
 onready var hitbox = $HitboxArea
+onready var whisper = $Whisper
 var path = null
 var path_finder = null
 
@@ -29,6 +30,7 @@ func _physics_process(delta):
 func on_hit_player(body):
 	if body.name == "Player":
 		body.die()
+		whisper.stop()
 		
 
 func move_along_path(path):

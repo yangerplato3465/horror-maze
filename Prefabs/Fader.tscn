@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Script/Fader.gd" type="Script" id=1]
+[ext_resource path="res://fonts/NoMercy.ttf" type="DynamicFontData" id=2]
 
 [sub_resource type="Animation" id=1]
 resource_name = "fade_in"
@@ -32,6 +33,40 @@ tracks/0/keys = {
 "values": [ Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 0 ) ]
 }
 
+[sub_resource type="Animation" id=3]
+resource_name = "word_fade_out"
+tracks/0/type = "value"
+tracks/0/path = NodePath("CenterContainer/Label:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="DynamicFont" id=4]
+size = 64
+font_data = ExtResource( 2 )
+
+[sub_resource type="Animation" id=5]
+resource_name = "word_fade_in"
+tracks/0/type = "value"
+tracks/0/path = NodePath("CenterContainer/Label:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
 [node name="Fader" type="ColorRect"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -44,4 +79,24 @@ __meta__ = {
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/fade_in = SubResource( 1 )
 anims/fade_out = SubResource( 2 )
+anims/word_fade_out = SubResource( 3 )
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CenterContainer"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 349.0
+margin_top = 263.0
+margin_right = 674.0
+margin_bottom = 337.0
+custom_fonts/font = SubResource( 4 )
+text = "You died"
+
+[node name="WordAnimationPlayer" type="AnimationPlayer" parent="."]
+anims/word_fade_in = SubResource( 5 )
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
