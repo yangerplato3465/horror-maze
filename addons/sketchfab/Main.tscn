@@ -1,0 +1,365 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://addons/sketchfab/Main.gd" type="Script" id=1]
+[ext_resource path="res://addons/sketchfab/HttpImage.gd" type="Script" id=2]
+[ext_resource path="res://addons/sketchfab/Paginator.gd" type="Script" id=3]
+
+[sub_resource type="GDScript" id=1]
+script/source = "tool
+extends Control
+
+func _draw():
+	draw_rect(get_rect(), Color(1.0, 1.0, 1.0))
+"
+
+[node name="Main" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+
+[node name="Header" type="MarginContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 90.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 8
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 6
+script = SubResource( 1 )
+
+[node name="_" type="HBoxContainer" parent="Header"]
+margin_left = 10.0
+margin_top = 8.0
+margin_right = 1014.0
+margin_bottom = 84.0
+
+[node name="Logo" type="TextureRect" parent="Header/_"]
+margin_top = 38.0
+margin_bottom = 38.0
+size_flags_horizontal = 2
+size_flags_vertical = 4
+
+[node name="Logged" type="VBoxContainer" parent="Header/_"]
+visible = false
+margin_left = 664.0
+margin_top = 5.0
+margin_right = 860.0
+margin_bottom = 71.0
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="_2" type="Label" parent="Header/_/Logged"]
+margin_right = 196.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 0.4, 0.4, 0.4, 1 )
+text = "Logged in as"
+align = 1
+
+[node name="_" type="HBoxContainer" parent="Header/_/Logged"]
+margin_top = 18.0
+margin_right = 196.0
+margin_bottom = 66.0
+custom_constants/separation = 8
+
+[node name="MainBlock" type="VBoxContainer" parent="Header/_/Logged/_"]
+margin_right = 140.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 140, 0 )
+size_flags_horizontal = 3
+size_flags_vertical = 5
+
+[node name="UserName" type="Label" parent="Header/_/Logged/_/MainBlock"]
+margin_right = 140.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "User"
+
+[node name="Plan" type="Label" parent="Header/_/Logged/_/MainBlock"]
+visible = false
+margin_top = 18.0
+margin_right = 140.0
+margin_bottom = 32.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Plan"
+
+[node name="Logout" type="Button" parent="Header/_/Logged/_/MainBlock"]
+margin_top = 18.0
+margin_right = 140.0
+margin_bottom = 38.0
+size_flags_horizontal = 3
+text = "Logout"
+
+[node name="Avatar" type="Control" parent="Header/_/Logged/_"]
+margin_left = 148.0
+margin_right = 196.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 48, 48 )
+script = ExtResource( 2 )
+max_size = 48.0
+background = Color( 0, 0, 0, 0 )
+immediate = false
+
+[node name="NotLogged" type="VBoxContainer" parent="Header/_"]
+margin_left = 864.0
+margin_right = 1004.0
+margin_bottom = 76.0
+rect_min_size = Vector2( 140, 0 )
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="_" type="Label" parent="Header/_/NotLogged"]
+visible = false
+margin_right = 140.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 0.4, 0.4, 0.4, 1 )
+text = "You're not logged in"
+align = 1
+
+[node name="UserName" type="LineEdit" parent="Header/_/NotLogged"]
+margin_right = 140.0
+margin_bottom = 24.0
+mouse_default_cursor_shape = 0
+placeholder_text = "User"
+
+[node name="Password" type="LineEdit" parent="Header/_/NotLogged"]
+margin_top = 28.0
+margin_right = 140.0
+margin_bottom = 52.0
+mouse_default_cursor_shape = 0
+secret = true
+placeholder_text = "Password"
+
+[node name="Login" type="Button" parent="Header/_/NotLogged"]
+margin_top = 56.0
+margin_right = 140.0
+margin_bottom = 76.0
+disabled = true
+text = "Login"
+
+[node name="Search" type="MarginContainer" parent="."]
+margin_top = 94.0
+margin_right = 1024.0
+margin_bottom = 162.0
+custom_constants/margin_right = 8
+custom_constants/margin_top = 2
+custom_constants/margin_left = 8
+
+[node name="_" type="VBoxContainer" parent="Search"]
+margin_left = 8.0
+margin_top = 2.0
+margin_right = 1016.0
+margin_bottom = 68.0
+mouse_filter = 0
+
+[node name="_" type="HBoxContainer" parent="Search/_"]
+margin_right = 1008.0
+margin_bottom = 24.0
+size_flags_vertical = 4
+custom_constants/separation = 10
+alignment = 1
+
+[node name="_" type="Label" parent="Search/_/_"]
+margin_top = 5.0
+margin_right = 46.0
+margin_bottom = 19.0
+text = "Search:"
+
+[node name="Text" type="LineEdit" parent="Search/_/_"]
+margin_left = 56.0
+margin_right = 878.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+caret_blink = true
+
+[node name="Button" type="Button" parent="Search/_/_"]
+margin_left = 888.0
+margin_top = 2.0
+margin_right = 1008.0
+margin_bottom = 22.0
+rect_min_size = Vector2( 120, 0 )
+size_flags_vertical = 4
+text = "Search"
+
+[node name="_3" type="PanelContainer" parent="Search/_"]
+margin_top = 28.0
+margin_right = 1008.0
+margin_bottom = 66.0
+
+[node name="_" type="HBoxContainer" parent="Search/_/_3"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1001.0
+margin_bottom = 31.0
+custom_constants/separation = 14
+
+[node name="_3" type="HBoxContainer" parent="Search/_/_3/_"]
+margin_top = 2.0
+margin_right = 312.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 2.0
+custom_constants/separation = 16
+
+[node name="_" type="Label" parent="Search/_/_3/_/_3"]
+margin_top = 3.0
+margin_right = 67.0
+margin_bottom = 17.0
+text = "Categories"
+
+[node name="Categories" type="MenuButton" parent="Search/_/_3/_/_3"]
+margin_left = 83.0
+margin_right = 312.0
+margin_bottom = 20.0
+focus_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+toggle_mode = false
+enabled_focus_mode = 2
+text = "All"
+flat = false
+align = 0
+items = [ "All", null, 1, true, false, 0, 0, null, "", false, "Animals & Pets", null, 1, true, false, 1, 0, "animals-pets", "", false, "Architecture", null, 1, true, false, 2, 0, "architecture", "", false, "Art & Abstract", null, 1, true, false, 3, 0, "art-abstract", "", false, "Cars & Vehicles", null, 1, true, false, 4, 0, "cars-vehicles", "", false, "Characters & Creatures", null, 1, true, false, 5, 0, "characters-creatures", "", false, "Cultural Heritage & History", null, 1, true, false, 6, 0, "cultural-heritage-history", "", false, "Electronics & Gadgets", null, 1, true, false, 7, 0, "electronics-gadgets", "", false, "Fashion & Style", null, 1, true, false, 8, 0, "fashion-style", "", false, "Food & Drink", null, 1, true, false, 9, 0, "food-drink", "", false, "Furniture & Home", null, 1, true, false, 10, 0, "furniture-home", "", false, "Music", null, 1, true, false, 11, 0, "music", "", false, "Nature & Plants", null, 1, true, false, 12, 0, "nature-plants", "", false, "News & Politics", null, 1, true, false, 13, 0, "news-politics", "", false, "People", null, 1, true, false, 14, 0, "people", "", false, "Places & Travel", null, 1, true, false, 15, 0, "places-travel", "", false, "Science & Technology", null, 1, true, false, 16, 0, "science-technology", "", false, "Sports & Fitness", null, 1, true, false, 17, 0, "sports-fitness", "", false, "Weapons & Military", null, 1, true, false, 18, 0, "weapons-military", "", false ]
+__meta__ = {
+"__slugs": [  ]
+}
+
+[node name="Animated" type="CheckBox" parent="Search/_/_3/_"]
+margin_left = 326.0
+margin_right = 443.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.75
+text = "Animated"
+
+[node name="StaffPicked" type="CheckBox" parent="Search/_/_3/_"]
+margin_left = 457.0
+margin_right = 574.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.75
+pressed = true
+text = "Staff-picked"
+
+[node name="_" type="HBoxContainer" parent="Search/_/_3/_"]
+margin_left = 588.0
+margin_top = 2.0
+margin_right = 744.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+custom_constants/separation = 16
+
+[node name="_" type="Label" parent="Search/_/_3/_/_"]
+margin_top = 3.0
+margin_right = 44.0
+margin_bottom = 17.0
+text = "Sort by"
+
+[node name="SortBy" type="OptionButton" parent="Search/_/_3/_/_"]
+margin_left = 60.0
+margin_right = 156.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+toggle_mode = false
+text = "Relevance"
+items = [ "Relevance", null, false, 0, null, "Recent", null, false, 1, null, "Likes", null, false, 2, null, "Views", null, false, 3, null ]
+selected = 0
+__meta__ = {
+"__key": "-publishedAt"
+}
+
+[node name="_2" type="HBoxContainer" parent="Search/_/_3/_"]
+margin_left = 758.0
+margin_top = 2.0
+margin_right = 994.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 1.5
+custom_constants/separation = 16
+
+[node name="_" type="Label" parent="Search/_/_3/_/_2"]
+margin_top = 3.0
+margin_right = 69.0
+margin_bottom = 17.0
+text = "Face count"
+
+[node name="FaceCount" type="OptionButton" parent="Search/_/_3/_/_2"]
+margin_left = 85.0
+margin_right = 236.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+toggle_mode = false
+text = "Any"
+items = [ "Any", null, false, 0, null, "Up to 10k", null, false, 1, null, "10k to 50k", null, false, 2, null, "50k to 100k", null, false, 3, null, "100k to 250k", null, false, 4, null, "More than 250k", null, false, 5, null ]
+selected = 0
+__meta__ = {
+"__data": [ "Any", null, null ]
+}
+
+[node name="_2" type="MarginContainer" parent="."]
+margin_top = 166.0
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 8
+custom_constants/margin_top = 8
+custom_constants/margin_left = 8
+custom_constants/margin_bottom = 8
+
+[node name="Paginator" type="ScrollContainer" parent="_2"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 1016.0
+margin_bottom = 426.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 3 )
+
+[node name="_" type="VBoxContainer" parent="_2/Paginator"]
+margin_right = 996.0
+margin_bottom = 1032.0
+size_flags_horizontal = 3
+
+[node name="ResultsGrid" type="GridContainer" parent="_2/Paginator/_"]
+margin_right = 996.0
+margin_bottom = 928.0
+size_flags_horizontal = 3
+custom_constants/vseparation = 16
+custom_constants/hseparation = 16
+columns = 6
+
+[node name="Trailer" type="CenterContainer" parent="_2/Paginator/_"]
+modulate = Color( 1, 1, 1, 0 )
+margin_top = 932.0
+margin_right = 996.0
+margin_bottom = 1032.0
+rect_min_size = Vector2( 0, 100 )
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="_2/Paginator/_/Trailer"]
+margin_left = 465.0
+margin_top = 43.0
+margin_right = 531.0
+margin_bottom = 57.0
+text = "Fetching..."
+[connection signal="pressed" from="Header/_/Logged/_/MainBlock/Logout" to="." method="_on_Logout_pressed"]
+[connection signal="text_changed" from="Header/_/NotLogged/UserName" to="." method="_on_any_login_text_changed"]
+[connection signal="text_entered" from="Header/_/NotLogged/UserName" to="." method="_on_UserName_text_entered"]
+[connection signal="text_changed" from="Header/_/NotLogged/Password" to="." method="_on_any_login_text_changed"]
+[connection signal="text_entered" from="Header/_/NotLogged/Password" to="." method="_on_Password_text_entered"]
+[connection signal="pressed" from="Header/_/NotLogged/Login" to="." method="_on_Login_pressed"]
+[connection signal="text_entered" from="Search/_/_/Text" to="." method="_on_SearchText_text_entered"]
+[connection signal="pressed" from="Search/_/_/Button" to="." method="_on_SearchButton_pressed"]
+[connection signal="pressed" from="Search/_/_3/_/Animated" to="." method="_on_any_search_trigger_changed"]
+[connection signal="pressed" from="Search/_/_3/_/StaffPicked" to="." method="_on_any_search_trigger_changed"]
+[connection signal="item_selected" from="Search/_/_3/_/_/SortBy" to="." method="_on_SortBy_item_selected"]
+[connection signal="item_selected" from="Search/_/_3/_/_2/FaceCount" to="." method="_on_FaceCount_item_selected"]

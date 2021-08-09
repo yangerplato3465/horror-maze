@@ -27,7 +27,9 @@ func _physics_process(delta):
 		move_along_path(path)
 
 func on_hit_player(body):
-	print("we touched " + body.name)
+	if body.name == "Player":
+		body.die()
+		
 
 func move_along_path(path):
 	if global_transform.origin.distance_to(path[0]) < 0.1:

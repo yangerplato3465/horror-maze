@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Script/Player.gd" type="Script" id=1]
 [ext_resource path="res://audio/breathing.wav" type="AudioStream" id=2]
 [ext_resource path="res://audio/386929__burghrecords__footsteps-indoor-soft.wav" type="AudioStream" id=3]
+[ext_resource path="res://Prefabs/Fader.tscn" type="PackedScene" id=4]
+[ext_resource path="res://audio/monster_growl.wav" type="AudioStream" id=5]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 0.7
@@ -41,4 +43,12 @@ stream = ExtResource( 3 )
 [node name="Breathing" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 2 )
 autoplay = true
+
+[node name="Fader" parent="." instance=ExtResource( 4 )]
+
+[node name="Growl" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+volume_db = -10.0
 [connection signal="area_entered" from="Area" to="." method="_on_Area_area_entered"]
+[connection signal="fade_finished" from="Fader" to="." method="_on_Fader_fade_finished"]
+[connection signal="finished" from="Growl" to="." method="_on_Growl_finished"]

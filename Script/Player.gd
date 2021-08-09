@@ -17,16 +17,32 @@ var rotation_helper
 var MOUSE_SENSITIVITY = 0.05
 onready var collider = $Area
 onready var footsteps = $FootStep
+onready var growl = $Growl
+onready var fader = $Fader
 var isWalking = false
+var shake_amount = 0;
+var isDying = false
+var monster = null
 signal orb_collected
 
 func _ready():
+	randomize()
 	camera = $CameraPivot/Camera
 	rotation_helper = $CameraPivot
 
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
+func set_monster(monster):
+	self.monster = monster
+
 func _physics_process(delta):
+	if isDying:
+		shake_amount += 0.02 * delta
+		camera.h_offset = rand_range(-1, 1) * shake_amount
+		camera.v_offset = rand_range(-1, 1) * shake_amount
+		self.look_at(monster.global_transform.origin, Vector3.UP)
+		return
+
 	process_input(delta)
 	process_movement(delta)
 
@@ -115,8 +131,17 @@ func _input(event):
 		camera_rot.x = clamp(camera_rot.x, -70, 70)
 		rotation_helper.rotation_degrees = camera_rot
 
+func die():
+	isDying = true
+	fader.set_playback_speed(0.15)
+	growl.play()
+	fader.fade_in()
 
 func _on_Area_area_entered(area):
 	if area.is_in_group("Orbs"):
 		area.queue_free()
 		emit_signal("orb_collected")
+
+
+func _on_Growl_finished():
+	get_tree().change_scene("res://Scenes/MainMenu.tscn")

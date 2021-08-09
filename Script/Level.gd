@@ -9,6 +9,7 @@ var total_orb_count = 0
 
 func _ready():
 	monster.set_target(player)
+	player.set_monster(monster)
 	total_orb_count = orb_container.get_child_count()
 	
 	player.connect("orb_collected", self, "on_orb_collected")

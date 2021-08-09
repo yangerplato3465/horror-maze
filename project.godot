@@ -24,6 +24,10 @@ config/name="horror-maze"
 run/main_scene="res://Scenes/MainMenu.tscn"
 config/icon="res://icon.png"
 
+[editor_plugins]
+
+enabled=PoolStringArray( "sketchfab" )
+
 [input]
 
 movement_forward={
