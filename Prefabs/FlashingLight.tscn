@@ -4,4 +4,7 @@
 
 [node name="FlashingLight" type="SpotLight"]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 0, 0 )
+light_energy = 1.5
+spot_range = 7.0
+spot_angle = 60.0
 script = ExtResource( 1 )

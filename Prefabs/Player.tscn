@@ -30,7 +30,9 @@ current = true
 
 [node name="SpotLight" type="SpotLight" parent="CameraPivot"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.702998, 0 )
-spot_angle = 30.0
+light_energy = 2.0
+spot_range = 10.0
+spot_angle = 15.0
 
 [node name="Area" type="Area" parent="."]
 

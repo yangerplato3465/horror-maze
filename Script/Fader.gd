@@ -16,6 +16,9 @@ func fade_out():
 func word_fade():
 	word_animation_player.play("word_fade_in")
 
+func win_fade():
+	word_animation_player.play("win_fade_in")
+
 func _on_AnimationPlayer_animation_finished(anim_name):
 	emit_signal("fade_finished")
 

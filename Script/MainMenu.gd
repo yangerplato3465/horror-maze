@@ -14,9 +14,12 @@ func _ready():
 func _on_Start_pressed():
 	fader.fade_in()
 	animation_player.play("fade_out")
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-func _on_Quit_pressed():
-	pass
 
 func _on_Fader_fade_finished():
 	get_tree().change_scene_to(game_scene)
+
+
+func _on_HowToPlay_pressed():
+	get_tree().change_scene("res://Scenes/Tutorial.tscn")

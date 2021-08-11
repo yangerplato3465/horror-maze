@@ -21,6 +21,7 @@ onready var footsteps = $FootStep
 onready var growl = $Growl
 onready var fader = $Fader
 onready var runMeter = $UI/ProgressBar
+onready var orbNum = $UI/number
 var isWalking = false
 var isRunning = false
 var canRun = true
@@ -116,7 +117,6 @@ func process_movement(delta):
 
 	var hvel = vel
 	hvel.y = 0
-	print("canrun" + String(canRun))
 	var target = dir
 	if isRunning && canRun:
 		target *= RUN_SPEED
@@ -148,8 +148,17 @@ func die():
 	fader.set_playback_speed(0.15)
 	growl.play()
 	$Breathing.stop()
+	footsteps.stop()
 	fader.word_fade()
 	fader.fade_in()
+
+func win():
+	fader.set_playback_speed(0.5)
+	$Breathing.stop()
+	footsteps.stop()
+	fader.win_fade()
+	fader.fade_in()
+
 
 func _on_Area_area_entered(area):
 	if area.is_in_group("Orbs"):
@@ -157,11 +166,10 @@ func _on_Area_area_entered(area):
 		emit_signal("orb_collected")
 
 
-func _on_Growl_finished():
-	get_tree().change_scene("res://Scenes/MainMenu.tscn")
+#func _on_Growl_finished():
+#	get_tree().change_scene("res://Scenes/MainMenu.tscn")
 
 func process_run_meter(delta):
-	
 	if isRunning:
 		runMeter.value -= 30 * delta
 	elif !isRunning && canRun:
@@ -172,6 +180,15 @@ func process_run_meter(delta):
 		$RefillTimer.start()
 		runMeter.value += 1
 
+func update_orb_num(total, collected):
+	orbNum.text = String(collected) + "/" + String(total)
+
+
 
 func _on_RefillTimer_timeout():
 	canRun = true
+
+
+func _on_Fader_fade_finished():
+	get_tree().change_scene("res://Scenes/MainMenu.tscn")
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
